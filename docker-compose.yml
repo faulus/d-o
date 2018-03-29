@@ -10,7 +10,7 @@ services:
     volumes:
       - /home/vm/ministation/nginx-proxy/config/proxy.conf:/etc/nginx/conf.d/proxy.conf
       - /home/vm/ministation/nginx-proxy/config/nginx.conf:/etc/nginx/nginx.conf
-
+      - /home/vm/ministation/.htpasswd:/etc/nginx/.htpasswd
   webserver:
     build: webserver/
     container_name: webserver
@@ -79,3 +79,20 @@ services:
 #     build: elfinder/
     image: uphy/elfinder
     container_name: elfinder
+#    environment:
+ #     - GIT_REPO=https://github.com/Studio-42/elFinder.git
+    volumes:
+      - /home/vm/ministation/elfinder/connector.php:/php/connector.minimal.php
+      - /home/vm/ministation/elfinder/data/elFinder:/var/www/html
+      - /home/vm/ministation/elfinder/php.ini:/usr/local/etc/php/php.ini
+
+  certbot:
+    image: certbot/certbot
+    command: certonly  --standalone --email zeino.paul@gmail.com -d container-ministation.francecentral.cloudapp.azure.com --agree-tos --non-interactive --text --rsa-key-size 4096 --standalone
+    volumes:
+      - cert:/etc/letsencrypt
+      - cert:/var/lib/letsencrypt
+
+
+volumes:
+  cert:

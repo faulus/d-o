@@ -11,7 +11,7 @@ $opts = array(
     array(
       'driver'        => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
       'path'          => '/data/',                 // path to files (REQUIRED)
-      'URL'           => dirname($_SERVER['PHP_SELF']) . './files/', // URL to files (REQUIRED)
+      'URL'           => './files/', // URL to files (REQUIRED)
       'trashHash'     => 't1_Lw',                     // elFinder's hash of trash folder
       //'uploadDeny'    => array('all'),                // All Mimetypes not allowed to upload
       //'uploadAllow'   => array('image', 'text/plain'),// Mimetype `image` and `text/plain` allowed to upload
