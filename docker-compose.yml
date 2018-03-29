@@ -1,0 +1,81 @@
+version: '3'
+
+services:
+
+  proxy:
+    build: nginx-proxy/
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /home/vm/ministation/nginx-proxy/config/proxy.conf:/etc/nginx/conf.d/proxy.conf
+      - /home/vm/ministation/nginx-proxy/config/nginx.conf:/etc/nginx/nginx.conf
+
+  webserver:
+    build: webserver/
+    container_name: webserver
+    
+
+  templates:
+    build: portainer-templates/ 
+    container_name: "portainer-templates"
+
+
+
+
+  logo:
+    build: portainer-logo
+    container_name: logo
+
+
+
+
+  portainer:
+    image: portainer/portainer
+    container_name: "portainer-app"
+#Automatically choose 'Manage the Docker instance where Portainer is running' by adding <--host=unix:///var/run/docker.sock> to the command
+    command: --no-auth --templates http://templates/templates.json --logo "http://logo/logo.svg"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/portainer/data:/data
+
+
+
+  watchtower:
+    image: v2tec/watchtower
+    container_name: "portainer-watchtower"
+    command: --cleanup portainer-app portainer-watchtower portainer/templates
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+
+
+
+  grafana:
+     image: grafana/grafana
+     container_name: grafana
+     volumes:
+      - ./grafana.ini:/etc/grafana/grafana.ini/
+    # environment:
+     # - GF_PATHS_CONFIG= /grafana.ini
+
+
+
+
+  zeppelin:
+     build: zeppelin/
+     container_name: zeppelin
+
+
+
+
+  nifi:
+     build: nifi/
+     container_name: nifi
+
+
+
+  elfinder:
+#     build: elfinder/
+    image: uphy/elfinder
+    container_name: elfinder
